@@ -9,7 +9,7 @@
         :root { --pink: #ff4081; --soft-pink: #fce4ec; }
         body { font-family: 'Georgia', serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: var(--soft-pink); overflow: hidden; text-align: center; }
         
-        .envelope-wrapper { cursor: pointer; transform: scale(1.2); }
+        .envelope-wrapper { cursor: pointer; transform: scale(1.2); transition: 0.3s; }
         .envelope { width: 150px; height: 100px; background: #d32f2f; position: relative; display: flex; justify-content: center; align-items: center; border-radius: 0 0 5px 5px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .envelope::before { content: ''; position: absolute; top: -75px; left: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-bottom: 75px solid #d32f2f; }
         .letter-icon { font-size: 50px; z-index: 2; }
@@ -18,7 +18,7 @@
         .loading-dots:after { content: ' .'; animation: dots 1s steps(5, end) infinite; }
         @keyframes dots { 0%, 20% { content: ' .'; } 40% { content: ' ..'; } 60% { content: ' ...'; } 80%, 100% { content: ''; } }
 
-        .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 400px; z-index: 10; border: 2px solid #f8bbd0; display: none; }
+        .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 400px; z-index: 10; border: 2px solid #f8bbd0; display: none; }
         .container.show { display: block; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
         @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -27,11 +27,14 @@
         .buttons { margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; position: relative; min-height: 60px; }
         
         button { padding: 12px 25px; font-size: 1rem; border: none; border-radius: 50px; cursor: pointer; font-family: 'Arial', sans-serif; transition: 0.2s; }
-        #yesBtn { background-color: var(--pink); color: white; font-weight: bold; }
+        #yesBtn { background-color: var(--pink); color: white; font-weight: bold; position: relative; }
         #noBtn { background-color: #9e9e9e; color: white; transition: 0.1s; z-index: 999; }
         
-        img { width: 180px; border-radius: 15px; margin-bottom: 10px; }
-        #player { position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; pointer-events: none; }
+        .main-gif { width: 180px; border-radius: 15px; margin-bottom: 10px; }
+        .glowing-man { width: 100%; max-width: 300px; border-radius: 15px; margin-top: 15px; }
+        
+        /* Hidden Music Player */
+        #music-container { position: absolute; visibility: hidden; width: 1px; height: 1px; }
     </style>
 </head>
 <body>
@@ -43,12 +46,10 @@
         </div>
     </div>
 
-    <div id="player-container">
-        <div id="player"></div>
-    </div>
+    <div id="music-container"></div>
 
     <div class="container" id="mainBox">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIycG0zdmt4dzZqZ3lyYnd2Ynh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9IbxxvDUQM/giphy.gif" alt="Cute Cat">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIycG0zdmt4dzZqZ3lyYnd2Ynh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9IbxxvDUQM/giphy.gif" class="main-gif">
         <h1>Maaari ba kitang maging Valentine?</h1>
         <p><i>"Dinggin mo ang hiling..."</i></p>
         
@@ -59,53 +60,20 @@
     </div>
 
     <script>
-        // Load the YouTube IFrame Player API code asynchronously.
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        var musicStarted = false;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: 'Uat3uCq6M88', // Leonora by Sugarcane
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'Uat3uCq6M88',
-                    'playsinline': 1
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // Unmute and set volume
-            event.target.mute(); 
-            event.target.setVolume(100);
-        }
+        let musicStarted = false;
 
         function startApp() {
             if (musicStarted) return;
             musicStarted = true;
 
-            // Try to play music
-            if (player && player.playVideo) {
-                player.unMute();
-                player.playVideo();
-            }
+            // Load Music by injecting hidden iframe
+            // This method is more reliable for "Leonora" by Sugarcane
+            document.getElementById('music-container').innerHTML = `
+                <iframe width="1" height="1" src="https://www.youtube.com/embed/Uat3uCq6M88?autoplay=1&loop=1&playlist=Uat3uCq6M88" frameborder="0" allow="autoplay"></iframe>
+            `;
 
-            // UI Feedback
             document.getElementById('statusText').innerHTML = "Binubuksan ang iyong sulat<span class='loading-dots'></span>";
             
-            // 8-Second Delay
             setTimeout(() => {
                 document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('mainBox').classList.add('show');
@@ -126,11 +94,12 @@
         }
 
         function celebrate() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+            
             document.getElementById('mainBox').innerHTML = `
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnJueHptZ3R3eXlybm5vYmN2N2JidmZ3eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KzM1lAfJjCW3TMVC9m/giphy.gif">
                 <h1>No Delete, No Erase! ❤️</h1>
                 <p>Naka-record na 'yan, bawal na bawiin. See you sa ika-14, Kammie!</p>
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHV0eXhnd2Y2bmZqZ3lyYnd2Ynh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0ExncehJvSdU69Z6/giphy.gif" class="glowing-man">
             `;
         }
     </script>
