@@ -9,26 +9,24 @@
         :root { --pink: #ff4081; --soft-pink: #fce4ec; --deep-pink: #c2185b; }
         body { font-family: 'Georgia', serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: var(--soft-pink); overflow: hidden; text-align: center; }
         
-        /* Opening Stage */
         #welcomeScreen { cursor: pointer; display: block; }
         .envelope { width: 140px; height: 90px; background: #d32f2f; position: relative; display: flex; justify-content: center; align-items: center; border-radius: 0 0 5px 5px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .envelope::before { content: ''; position: absolute; top: -70px; left: 0; border-left: 70px solid transparent; border-right: 70px solid transparent; border-bottom: 70px solid #d32f2f; }
+        .envelope::before { content: ''; position: absolute; top: -70px; left: 0; border-left: 70px solid transparent; border-right: 75px solid transparent; border-bottom: 70px solid #d32f2f; }
         .letter-icon { font-size: 45px; z-index: 2; }
         .open-text { margin-top: 30px; color: var(--deep-pink); font-weight: bold; font-size: 1.1rem; }
 
-        /* Question Stage */
         .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 400px; border: 2px solid #f8bbd0; display: none; }
         
-        h1 { color: var(--deep-pink); font-size: 1.5rem; }
+        h1 { color: var(--deep-pink); font-size: 1.5rem; margin-top: 15px; }
         .buttons { margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 60px; position: relative; }
         
         button { padding: 12px 25px; font-size: 1rem; border: none; border-radius: 50px; cursor: pointer; transition: 0.2s; }
         #yesBtn { background-color: var(--pink); color: white; font-weight: bold; }
         #noBtn { background-color: #9e9e9e; color: white; transition: 0.1s; z-index: 999; }
         
-        .main-gif { width: 150px; border-radius: 15px; }
+        .main-gif { width: 180px; border-radius: 15px; }
         .final-image { width: 100%; max-width: 250px; border-radius: 15px; margin: 15px auto; display: block; }
-        .messenger-btn { display: inline-block; margin-top: 10px; padding: 12px 24px; background-color: #0084ff; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; }
+        .messenger-btn { display: inline-block; margin-top: 10px; padding: 12px 24px; background-color: #0084ff; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-family: Arial, sans-serif; }
     </style>
 </head>
 <body>
@@ -43,7 +41,7 @@
     </audio>
 
     <div class="container" id="mainBox">
-        <img src="https://i.imgur.com/6oG9yHt.gif" class="main-gif">
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIycG0zdmt4dzZqZ3lyYnd2Ynh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9IbxxvDUQM/giphy.gif" class="main-gif">
         <h1>Maaari ba kitang maging Valentine?</h1>
         <p><i>"Dinggin mo ang hiling..."</i></p>
         <div class="buttons">
@@ -54,14 +52,11 @@
 
     <script>
         function startApp() {
-            // Start Music
             var music = document.getElementById('bgMusic');
             music.play();
 
-            // Visual Feedback
             document.getElementById('statusText').innerHTML = "Binubuksan ang iyong sulat...";
 
-            // 8 Second Delay
             setTimeout(function() {
                 document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('mainBox').style.display = 'block';
@@ -78,7 +73,7 @@
             
             var yesBtn = document.getElementById('yesBtn');
             var currScale = yesBtn.style.transform.replace(/[^\d.]/g, '') || 1;
-            yesBtn.style.transform = "scale(" + (parseFloat(currScale) + 0.2) + ")";
+            yesBtn.style.transform = "scale(" + (parseFloat(currScale) + 0.25) + ")";
         }
 
         function celebrate() {
