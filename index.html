@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #ffebee; overflow: hidden; text-align: center; }
+        .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: #d32f2f; margin-bottom: 10px; }
+        p { font-size: 1.2rem; color: #555; }
+        .buttons { margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; position: relative; }
+        button { padding: 15px 30px; font-size: 1.2rem; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        #yesBtn { background-color: #ff4081; color: white; }
+        #noBtn { background-color: #9e9e9e; color: white; position: relative; }
+        img { width: 200px; border-radius: 15px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainBox">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eHptZ3R3eXlybm5vYmN2N2JidmZ3eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNUMo/giphy.gif" alt="Cute Cat">
+        <h1>Maaari ba kitang maging Valentine?</h1>
+        <p>Will you go out with me this coming Feb 14?</p>
+        
+        <div class="buttons">
+            <button id="yesBtn" onclick="celebrate()">Sige! (Yes)</button>
+            <button id="noBtn" onmouseover="moveButton()">Hindi (No)</button>
+        </div>
+    </div>
+
+    <script>
+        let yesSize = 1.2;
+
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            
+            // Move the No button randomly
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Make the Yes button bigger and more tempting
+            yesSize += 0.2;
+            yesBtn.style.transform = `scale(${yesSize})`;
+        }
+
+        function celebrate() {
+            document.getElementById('mainBox').innerHTML = `
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnJueHptZ3R3eXlybm5vYmN2N2JidmZ3eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KzM1lAfJjCW3TMVC9m/giphy.gif">
+                <h1>Yehey! See you on the 14th! ❤️</h1>
+                <p>I'll send you the details later. Maghanda ka!</p>
+            `;
+        }
+    </script>
+</body>
+</html>
