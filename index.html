@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para kay Kammie</title>
+    <title>Para sa aking Leonora</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { font-family: 'Georgia', serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #fce4ec; overflow: hidden; text-align: center; }
-        .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; z-index: 10; border: 2px solid #f8bbd0; }
+        .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; z-index: 10; border: 2px solid #f8bbd0; position: relative; }
         h1 { color: #c2185b; font-size: 1.6rem; }
         p { font-size: 1.1rem; color: #555; }
         .buttons { margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; }
         button { padding: 12px 25px; font-size: 1rem; border: none; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease; font-family: 'Arial', sans-serif; }
         #yesBtn { background-color: #ff4081; color: white; font-weight: bold; }
         #noBtn { background-color: #9e9e9e; color: white; position: absolute; transition: 0.1s; }
-        #startBtn { background-color: #c2185b; color: white; padding: 20px 40px; font-size: 1.2rem; }
-        img { width: 180px; border-radius: 15px; margin-bottom: 20px; }
+        #startBtn { background-color: #c2185b; color: white; padding: 20px 40px; font-size: 1.2rem; cursor: pointer; border-radius: 50px; border: none; }
+        img { width: 200px; height: auto; border-radius: 15px; margin-bottom: 20px; }
         .hidden { display: none; }
+        /* Hides the YouTube player */
+        #player { position: absolute; top: -9999px; left: -9999px; }
     </style>
 </head>
 <body>
@@ -25,10 +27,12 @@
         <button id="startBtn" onclick="startApp()">Buksan ang Liham (Open Letter) 💌</button>
     </div>
 
+    <div id="player"></div>
+
     <div class="container hidden" id="mainBox">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eHptZ3R3eXlybm5vYmN2N2JidmZ3eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNUMo/giphy.gif" alt="Cute Cat">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIycG0zdmt4dzZqZ3lyYnd2Ynh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9IbxxvDUQM/giphy.gif" alt="Cute Cat">
         <h1>Maaari ba kitang maging Valentine?</h1>
-        <p><i>"Dinggin mo lang ang hiling na mag-iingat ka..."</i></p>
+        <p><i>"Dinggin mo ang hiling..."</i></p>
         <p>Will you go out with me this coming 14th?</p>
         
         <div class="buttons">
@@ -37,52 +41,53 @@
         </div>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://www.mboxdrive.com/Leonora.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
     <script>
-        const music = document.getElementById('bgMusic');
-        let yesSize = 1;
+        // Load YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'Uat3uCq6M88', // Leonora - Sugarcane
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'Uat3uCq6M88' }
+            });
+        }
 
         function startApp() {
-            // Hide welcome screen and show main content
             document.getElementById('welcomeScreen').classList.add('hidden');
             document.getElementById('mainBox').classList.remove('hidden');
-            
-            // Play the music
-            music.play().catch(error => console.log("Playback failed:", error));
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
         }
 
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
             const maxX = window.innerWidth - noBtn.offsetWidth;
             const maxY = window.innerHeight - noBtn.offsetHeight;
-            
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
             
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            yesSize += 0.2;
-            document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
+            let yesBtn = document.getElementById('yesBtn');
+            let currentScale = parseFloat(yesBtn.style.transform.replace('scale(', '').replace(')', '')) || 1;
+            yesBtn.style.transform = `scale(${currentScale + 0.15})`;
         }
 
         function celebrate() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4081', '#ff80ab', '#ffffff']
-            });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
             document.getElementById('mainBox').innerHTML = `
                 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnJueHptZ3R3eXlybm5vYmN2N2JidmZ3eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KzM1lAfJjCW3TMVC9m/giphy.gif">
                 <h1>Yehey! See you! ❤️</h1>
                 <p>I'm so glad you said yes. Maghanda ka sa 14th!</p>
-                <p style="font-size: 0.9rem; color: #888;"><i>"Tayo na sanang dalawa, ang siyang huli at ang umpisa..."</i></p>
             `;
         }
     </script>
